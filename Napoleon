@@ -1,0 +1,3026 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Napoleon</title>
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=Lato:wght@400;700&display=swap');
+
+      html {
+        height: 100%;
+      }
+
+      body {
+        font-family: 'Lato', sans-serif;
+        background-color: #eae3d9;
+        color: #4a4a4a;
+        margin: 0;
+        display: flex;
+        justify-content: center;
+        align-items: flex-start;
+        padding: 50px 30px;
+        min-height: 100%;
+        background-image: url('data:image/svg+xml,%3Csvg width="100" height="100" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"%3E%3Cpath d="M11 18c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm48 25c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm-43-7c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm63 31c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM34 90c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm56-76c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3z" fill="%23D3C5B5" fill-opacity="0.3"/%3E%3C/svg%3E');
+        box-sizing: border-box;
+      }
+
+      .page-layout {
+        display: flex;
+        justify-content: center;
+        align-items: flex-start;
+        gap: 30px;
+        width: 100%;
+        max-width: 1450px;
+      }
+
+      .container {
+        width: 100%;
+        max-width: 1150px;
+        background-color: #fdfdfd;
+        border-radius: 4px;
+        box-shadow: 0 15px 50px rgba(0, 0, 0, 0.2);
+        border: 1px solid #d1cfc7;
+        position: relative;
+        flex-shrink: 0;
+      }
+
+      .banner {
+        height: 250px;
+        background-image: linear-gradient(
+            rgba(0, 0, 0, 0.1),
+            rgba(0, 0, 0, 0.2)
+          ),
+          url('https://upload.wikimedia.org/wikipedia/commons/thumb/0/04/Imperial_Coat_of_Arms_of_France_%281804-1815%29.svg/1838px-Imperial_Coat_of_Arms_of_France_%281804-1815%29.svg.png');
+        background-size: cover;
+        background-position: center;
+        border-bottom: 1px solid #d1cfc7;
+      }
+
+      .profile-pic {
+        width: 150px;
+        height: 150px;
+        border-radius: 50%;
+        border: 6px solid #fdfdfd;
+        position: absolute;
+        top: 175px;
+        left: 40px;
+        z-index: 2;
+        object-fit: cover;
+        object-position: center;
+      }
+
+      .profile-body {
+        display: flex;
+        padding-top: 75px;
+      }
+      .profile-column {
+        width: 450px;
+        flex-shrink: 0;
+        padding: 25px 30px 25px 40px;
+      }
+
+      .profile-header-main {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 5px;
+        gap: 15px;
+      }
+
+      .profile-column h2 {
+        font-family: 'Cormorant Garamond', serif;
+        font-size: 28px;
+        font-weight: 700;
+        margin: 0;
+        color: #3d2b1f;
+        line-height: 1.2;
+        white-space: nowrap;
+      }
+      .handle {
+        font-size: 16px;
+        color: #6c757d;
+        margin-bottom: 15px;
+      }
+      .followed-by {
+        font-size: 14px;
+        color: #6c757d;
+        margin-bottom: 20px;
+      }
+      .followed-by b {
+        color: #4a4a4a;
+      }
+      .stats {
+        display: flex;
+        gap: 20px;
+        font-size: 15px;
+        margin-bottom: 20px;
+        color: #6c757d;
+      }
+      .stats span {
+        color: #333;
+        font-weight: bold;
+      }
+      .bio {
+        font-size: 15px;
+        line-height: 1.65;
+        margin-bottom: 25px;
+        max-width: 340px;
+      }
+      .details-grid {
+        display: grid;
+        gap: 15px;
+        font-size: 14px;
+      }
+      .detail-item {
+        display: flex;
+        align-items: center;
+      }
+      .detail-item svg {
+        width: 18px;
+        height: 18px;
+        margin-right: 12px;
+        fill: #6a6a6a;
+        flex-shrink: 0;
+      }
+
+      .timeline-column {
+        flex-grow: 1;
+        border-left: 1px solid #eae3d9;
+      }
+      .tabs {
+        display: flex;
+        border-bottom: 1px solid #eae3d9;
+      }
+      .tab {
+        flex: 1;
+        padding: 18px 10px;
+        text-align: center;
+        font-weight: 700;
+        color: #6c757d;
+        cursor: pointer;
+        position: relative;
+      }
+      .tab.active {
+        color: #981e21;
+      }
+      .tab.active::after {
+        content: '';
+        position: absolute;
+        bottom: -1px;
+        left: 0;
+        width: 100%;
+        height: 3px;
+        background-color: #981e21;
+      }
+
+      .chronicle {
+        padding: 25px 30px;
+        border-bottom: 1px solid #eae3d9;
+        display: flex;
+        align-items: flex-start;
+      }
+      .chronicle:last-child {
+        border-bottom: none;
+      }
+      .author-icon {
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        margin-right: 18px;
+        flex-shrink: 0;
+        object-fit: cover;
+      }
+
+      .chronicle-content {
+        width: 100%;
+      }
+      .chronicle-header {
+        display: flex;
+        align-items: baseline;
+        justify-content: space-between;
+        margin-bottom: 12px;
+      }
+      .chronicle-header .author-details {
+        display: flex;
+        align-items: baseline;
+        gap: 8px;
+      }
+      .chronicle-header .name {
+        font-family: 'Cormorant Garamond', serif;
+        font-size: 20px;
+        font-weight: 700;
+        color: #3d2b1f;
+      }
+      .chronicle-header .handle {
+        font-size: 16px;
+        color: #6c757d;
+      }
+      .chronicle-header .timestamp {
+        color: #6c757d;
+        font-size: 14px;
+      }
+      .chronicle-text {
+        font-family: 'Cormorant Garamond', serif;
+        font-size: 18px;
+        font-weight: 600;
+        line-height: 1.7;
+        color: #4a4a4a;
+        margin-bottom: 17px;
+        margin-top: -17px;
+      }
+      .mention {
+        color: #981e21;
+        font-weight: bold;
+        cursor: pointer;
+      }
+      .chronicle-footer {
+        display: flex;
+        gap: 45px;
+        color: #6c757d;
+      }
+      .footer-action {
+        display: flex;
+        align-items: center;
+        cursor: pointer;
+        font-size: 14px;
+      }
+      .footer-action svg {
+        width: 22px;
+        height: 22px;
+        margin-right: 10px;
+        fill: #6c757d;
+      }
+
+      .aside-section {
+        display: flex;
+        flex-direction: column;
+        gap: 30px;
+        width: 320px;
+        flex-shrink: 0;
+      }
+      .aside-card {
+        background-color: #fdfdfd;
+        border: 1px solid #d1cfc7;
+        border-radius: 4px;
+        padding: 20px;
+      }
+      .aside-card h3 {
+        font-family: 'Cormorant Garamond', serif;
+        font-size: 22px;
+        margin: 0 0 20px 0;
+        color: #3d2b1f;
+        border-bottom: 1px solid #eae3d9;
+        padding-bottom: 15px;
+      }
+
+      .trend-item {
+        margin-bottom: 20px;
+      }
+      .trend-category {
+        font-size: 14px;
+        color: #6c757d;
+      }
+      .trend-name {
+        font-size: 18px;
+        font-weight: bold;
+        color: #333;
+        margin: 2px 0;
+      }
+      .trend-name.hot-trend {
+        font-weight: bold;
+        color: #981e21;
+        display: flex;
+        align-items: center;
+      }
+      .trend-name svg {
+        width: 16px;
+        height: 16px;
+        margin-left: 8px;
+        fill: #c0392b;
+      }
+      .trend-count {
+        font-size: 14px;
+        color: #6c757d;
+      }
+
+      .profile-actions {
+        display: flex;
+        gap: 8px;
+        flex-shrink: 0;
+      }
+
+      .follow-item {
+        display: flex;
+        align-items: center;
+        margin-bottom: 20px;
+      }
+      .follow-avatar {
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        margin-right: 15px;
+        object-fit: cover;
+        flex-shrink: 0;
+      }
+      .follow-info {
+        flex-grow: 1;
+        margin-right: 10px;
+      }
+      .follow-info .name {
+        font-weight: bold;
+        font-size: 16px;
+        color: #333;
+      }
+      .follow-info .handle {
+        color: #6c757d;
+      }
+      .follow-button,
+      .message-btn {
+        font-size: 14px;
+        padding: 6px 12px;
+        border-radius: 16px;
+        border: 1px solid #d1cfc7;
+        cursor: pointer;
+        font-weight: bold;
+        display: flex;
+        align-items: center;
+        flex-shrink: 0;
+      }
+
+      .follow-button {
+        background-color: #3d2b1f;
+        color: #fff;
+        border-color: #3d2b1f;
+      }
+
+      .message-btn {
+        background-color: white;
+        color: #4a4a4a;
+      }
+
+      .message-btn svg {
+        fill: #4a4a4a;
+        margin-right: 6px;
+        height: 16px;
+        width: 16px;
+      }
+
+      .follow-button.followed {
+        background-color: #eae3d9;
+        color: #4a4a4a;
+        border: 1px solid #d1cfc7;
+        font-weight: 700;
+      }
+
+      .footer-action.liked svg {
+        fill: #e2264d;
+      }
+      .footer-action.liked {
+        color: #e2264d;
+        font-weight: bold;
+      }
+
+      .footer-action.rt {
+        color: #19cf86;
+        font-weight: bold;
+      }
+
+      .footer-action.rt svg {
+        fill: #19cf86;
+      }
+    </style>
+  </head>
+  <body>
+    <main class="page-layout">
+      <div class="container">
+        <div class="banner"></div>
+        <img
+          src="https://blog.napoleon-cologne.fr/wp-content/uploads/2021/04/bicentenaire-napoleon-bonaparte-mort-1024x683.jpg"
+          alt="Napoleon Bonaparte"
+          class="profile-pic"
+        />
+
+        <div class="profile-body">
+          <div class="profile-column">
+            <div class="profile-header-main">
+              <h2>Napoléon Bonaparte</h2>
+              <div class="profile-actions">
+                <button class="message-btn">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 96 960 960"
+                  >
+                    <path
+                      d="M160 816q-33 0-56.5-23.5T80 736V256q0-33 23.5-56.5T160 176h640q33 0 56.5 23.5T880 256v480q0 33-23.5 56.5T800 816H160Zm320-280L160 336v400h640V336L480 536Zm0-80 320-200H160l320 200ZM160 336v-80 480-400Z"
+                    />
+                  </svg>
+                  Message
+                </button>
+                <button class="follow-button">Follow</button>
+              </div>
+            </div>
+            <div class="handle">@LittleCorporal</div>
+            <div class="followed-by">
+              Followed by <b>Marshal Soult</b>, <b>Murat</b>,
+              <b>LaGrandArmée</b>, and <b>7 others</b>
+            </div>
+            <div class="stats">
+              <div><span>12</span> Following</div>
+              <div><span>143M</span> Followers</div>
+            </div>
+            <p class="bio">
+              Husband to <span class="mention">@Joséphine</span>, Emperor of the
+              French, King of Italy (Get it right Wikipedia!!)
+              <br />
+              <br />
+
+              VIVE LA FRANCE
+            </p>
+            <div class="details-grid">
+              <div class="detail-item">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                  <path
+                    d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"
+                  ></path></svg
+                ><span>Pratzen Heights, Austerlitz</span>
+              </div>
+              <div class="detail-item">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                  <path d="M14.4 6 14 4H5v17h2v-7h5.6l.4 2h7V6h-5.6z"></path>
+                </svg>
+                <span>In Command of La Grande Armée</span>
+              </div>
+              <div class="detail-item">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                  <path
+                    d="M19 3h-1V1h-2v2H8V1H6v2H5c-1.11 0-1.99.9-1.99 2L3 19c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V8h14v11zM7 10h5v5H7z"
+                  ></path></svg
+                ><span>Crowned December 2, 1804</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="timeline-column">
+            <div class="tabs">
+              <div class="tab active">Posts</div>
+              <div class="tab">Replies</div>
+              <div class="tab">Media</div>
+            </div>
+            <div class="chronicles-feed">
+              <div class="chronicle">
+                <img
+                  src="https://blog.napoleon-cologne.fr/wp-content/uploads/2021/04/bicentenaire-napoleon-bonaparte-mort-1024x683.jpg"
+                  alt="Author Icon"
+                  class="author-icon"
+                />
+                <div class="chronicle-content">
+                  <div class="chronicle-header">
+                    <div class="author-details">
+                      <span class="name">Empereur Napoléon</span>
+                      <span class="handle">@LittleCorporal</span>
+                    </div>
+                    <span class="timestamp">December 02, 1804</span>
+                  </div>
+                  <p class="chronicle-text">
+                    I swear to maintain the integrity of the territory of the
+                    Republic, to respect and enforce respect for the Concordat
+                    and freedom of religion, equality of rights, political and
+                    civil liberty, the irrevocability of the sale of national
+                    lands; not to raise any tax except in virtue of the law; to
+                    maintain the institution of Legion of Honour and to govern
+                    in the sole interest, happiness and glory of the French
+                    people.
+                  </p>
+                  <div class="chronicle-footer">
+                    <div class="footer-action">
+                      <svg viewBox="0 0 24 24">
+                        <path
+                          d="M21.99 4c0-1.1-.89-2-1.99-2H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h14l4 4-.01-18z"
+                        ></path>
+                      </svg>
+                      8.3M
+                    </div>
+                    <div class="footer-action rt">
+                      <svg viewBox="0 0 24 24">
+                        <path
+                          d="M7 7h10v3l4-4-4-4v3H5v6h2V7zm10 10H7v-3l-4 4 4 4v-3h12v-6h-2v4z"
+                        ></path>
+                      </svg>
+                      5.2M
+                    </div>
+                    <div class="footer-action liked">
+                      <svg viewBox="0 0 24 24">
+                        <path
+                          d="m12 21.35-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54Z"
+                        ></path>
+                      </svg>
+                      25.2M
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="chronicle">
+                <img
+                  src="https://blog.napoleon-cologne.fr/wp-content/uploads/2021/04/bicentenaire-napoleon-bonaparte-mort-1024x683.jpg"
+                  alt="Author Icon"
+                  class="author-icon"
+                />
+                <div class="chronicle-content">
+                  <div class="chronicle-header">
+                    <div class="author-details">
+                      <span class="name">Empereur Napoléon</span>
+                      <span class="handle">@LittleCorporal</span>
+                    </div>
+                    <span class="timestamp">August 02, 1805</span>
+                  </div>
+                  <p class="chronicle-text">
+                    Let us be masters of the Channel for six hours and we are
+                    masters of the world.
+                  </p>
+                  <div class="chronicle-footer">
+                    <div class="footer-action">
+                      <svg viewBox="0 0 24 24">
+                        <path
+                          d="M21.99 4c0-1.1-.89-2-1.99-2H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h14l4 4-.01-18z"
+                        ></path>
+                      </svg>
+                      75K
+                    </div>
+                    <div class="footer-action">
+                      <svg viewBox="0 0 24 24">
+                        <path
+                          d="M7 7h10v3l4-4-4-4v3H5v6h2V7zm10 10H7v-3l-4 4 4 4v-3h12v-6h-2v4z"
+                        ></path>
+                      </svg>
+                      320K
+                    </div>
+                    <div class="footer-action liked">
+                      <svg viewBox="0 0 24 24">
+                        <path
+                          d="m12 21.35-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54Z"
+                        ></path>
+                      </svg>
+                      1.5M
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="chronicle">
+                <img
+                  src="https://blog.napoleon-cologne.fr/wp-content/uploads/2021/04/bicentenaire-napoleon-bonaparte-mort-1024x683.jpg"
+                  alt="Author Icon"
+                  class="author-icon"
+                />
+                <div class="chronicle-content">
+                  <div class="chronicle-header">
+                    <div class="author-details">
+                      <span class="name">Empereur Napoléon</span>
+                      <span class="handle">@LittleCorporal</span>
+                    </div>
+                    <span class="timestamp">August 26, 1805</span>
+                  </div>
+                  <p class="chronicle-text">
+                    Serious news has been received. The
+                    <span class="mention">@AustrianEmpire</span> and
+                    <span class="mention">@RussianEmpire</span> armies march on
+                    France. They line the Adige, threaten Bavaria, and are on
+                    the edge of the Black Forest. #FrenchDefense
+                    #WarOnTheContinent
+                  </p>
+                  <div class="chronicle-footer">
+                    <div class="footer-action">
+                      <svg viewBox="0 0 24 24">
+                        <path
+                          d="M21.99 4c0-1.1-.89-2-1.99-2H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h14l4 4-.01-18z"
+                        ></path>
+                      </svg>
+                      90K
+                    </div>
+                    <div class="footer-action">
+                      <svg viewBox="0 0 24 24">
+                        <path
+                          d="M7 7h10v3l4-4-4-4v3H5v6h2V7zm10 10H7v-3l-4 4 4 4v-3h12v-6h-2v4z"
+                        ></path>
+                      </svg>
+                      580K
+                    </div>
+                    <div class="footer-action liked">
+                      <svg viewBox="0 0 24 24">
+                        <path
+                          d="m12 21.35-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54Z"
+                        ></path>
+                      </svg>
+                      3.1M
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="chronicle">
+                <img
+                  src="https://blog.napoleon-cologne.fr/wp-content/uploads/2021/04/bicentenaire-napoleon-bonaparte-mort-1024x683.jpg"
+                  alt="Author Icon"
+                  class="author-icon"
+                />
+                <div class="chronicle-content">
+                  <div class="chronicle-header">
+                    <div class="author-details">
+                      <span class="name">Empereur Napoléon</span>
+                      <span class="handle">@LittleCorporal</span>
+                    </div>
+                    <span class="timestamp">August 30, 1805</span>
+                  </div>
+                  <p class="chronicle-text">
+                    The Great Army is in motion. If I must abandon our previous
+                    aims, we will make history elsewhere.
+                    <span class="mention">@Berthier</span>, prepare the orders.
+                    We leave for Brünn. #OnTheMarch #Liberty
+                  </p>
+                  <div class="chronicle-footer">
+                    <div class="footer-action">
+                      <svg viewBox="0 0 24 24">
+                        <path
+                          d="M21.99 4c0-1.1-.89-2-1.99-2H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h14l4 4-.01-18z"
+                        ></path>
+                      </svg>
+                      80K
+                    </div>
+                    <div class="footer-action">
+                      <svg viewBox="0 0 24 24">
+                        <path
+                          d="M7 7h10v3l4-4-4-4v3H5v6h2V7zm10 10H7v-3l-4 4 4 4v-3h12v-6h-2v4z"
+                        ></path>
+                      </svg>
+                      450K
+                    </div>
+                    <div class="footer-action">
+                      <svg viewBox="0 0 24 24">
+                        <path
+                          d="m12 21.35-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54Z"
+                        ></path>
+                      </svg>
+                      2.8M
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="chronicle">
+                <img
+                  src="https://blog.napoleon-cologne.fr/wp-content/uploads/2021/04/bicentenaire-napoleon-bonaparte-mort-1024x683.jpg"
+                  alt="Author Icon"
+                  class="author-icon"
+                />
+                <div class="chronicle-content">
+                  <div class="chronicle-header">
+                    <div class="author-details">
+                      <span class="name">Empereur Napoléon</span>
+                      <span class="handle">@LittleCorporal</span>
+                    </div>
+                    <span class="timestamp">September 5, 1805</span>
+                  </div>
+                  <p class="chronicle-text">
+                    My 150,000 men will travel across France and Germany for
+                    three weeks, towards Vienna. Pay close attention. #GrandArmy
+                    #RapidAdvance
+                  </p>
+                  <div class="chronicle-footer">
+                    <div class="footer-action">
+                      <svg viewBox="0 0 24 24">
+                        <path
+                          d="M21.99 4c0-1.1-.89-2-1.99-2H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h14l4 4-.01-18z"
+                        ></path>
+                      </svg>
+                      110K
+                    </div>
+                    <div class="footer-action">
+                      <svg viewBox="0 0 24 24">
+                        <path
+                          d="M7 7h10v3l4-4-4-4v3H5v6h2V7zm10 10H7v-3l-4 4 4 4v-3h12v-6h-2v4z"
+                        ></path>
+                      </svg>
+                      620K
+                    </div>
+                    <div class="footer-action">
+                      <svg viewBox="0 0 24 24">
+                        <path
+                          d="m12 21.35-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54Z"
+                        ></path>
+                      </svg>
+                      4.1M
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="chronicle">
+                <img
+                  src="https://blog.napoleon-cologne.fr/wp-content/uploads/2021/04/bicentenaire-napoleon-bonaparte-mort-1024x683.jpg"
+                  alt="Author Icon"
+                  class="author-icon"
+                />
+                <div class="chronicle-content">
+                  <div class="chronicle-header">
+                    <div class="author-details">
+                      <span class="name">Empereur Napoléon</span>
+                      <span class="handle">@LittleCorporal</span>
+                    </div>
+                    <span class="timestamp">September 24, 1805</span>
+                  </div>
+                  <p class="chronicle-text">
+                    Soult, with 40,000 men, will be at Reno. Murat's cavalry
+                    precedes him. Davout, Lannes, Ney, Augereau, my Imperial
+                    Guard, and I will join.
+                  </p>
+                  <div class="chronicle-footer">
+                    <div class="footer-action">
+                      <svg viewBox="0 0 24 24">
+                        <path
+                          d="M21.99 4c0-1.1-.89-2-1.99-2H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h14l4 4-.01-18z"
+                        ></path>
+                      </svg>
+                      95K
+                    </div>
+                    <div class="footer-action">
+                      <svg viewBox="0 0 24 24">
+                        <path
+                          d="M7 7h10v3l4-4-4-4v3H5v6h2V7zm10 10H7v-3l-4 4 4 4v-3h12v-6h-2v4z"
+                        ></path>
+                      </svg>
+                      550K
+                    </div>
+                    <div class="footer-action">
+                      <svg viewBox="0 0 24 24">
+                        <path
+                          d="m12 21.35-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54Z"
+                        ></path>
+                      </svg>
+                      3.5M
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="chronicle">
+                <img
+                  src="https://blog.napoleon-cologne.fr/wp-content/uploads/2021/04/bicentenaire-napoleon-bonaparte-mort-1024x683.jpg"
+                  alt="Author Icon"
+                  class="author-icon"
+                />
+                <div class="chronicle-content">
+                  <div class="chronicle-header">
+                    <div class="author-details">
+                      <span class="name">Empereur Napoléon</span>
+                      <span class="handle">@LittleCorporal</span>
+                    </div>
+                    <span class="timestamp">September 29, 1805</span>
+                  </div>
+                  <p class="chronicle-text">
+                    Marmont's forces from Hannover will reach Gürburg, behind
+                    Ulm. All our forces will unite into a single Grand Army.
+                  </p>
+                  <div class="chronicle-footer">
+                    <div class="footer-action">
+                      <svg viewBox="0 0 24 24">
+                        <path
+                          d="M21.99 4c0-1.1-.89-2-1.99-2H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h14l4 4-.01-18z"
+                        ></path>
+                      </svg>
+                      130K
+                    </div>
+                    <div class="footer-action">
+                      <svg viewBox="0 0 24 24">
+                        <path
+                          d="M7 7h10v3l4-4-4-4v3H5v6h2V7zm10 10H7v-3l-4 4 4 4v-3h12v-6h-2v4z"
+                        ></path>
+                      </svg>
+                      700K
+                    </div>
+                    <div class="footer-action">
+                      <svg viewBox="0 0 24 24">
+                        <path
+                          d="m12 21.35-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54Z"
+                        ></path>
+                      </svg>
+                      4.8M
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="chronicle">
+                <img
+                  src="https://blog.napoleon-cologne.fr/wp-content/uploads/2021/04/bicentenaire-napoleon-bonaparte-mort-1024x683.jpg"
+                  alt="Author Icon"
+                  class="author-icon"
+                />
+                <div class="chronicle-content">
+                  <div class="chronicle-header">
+                    <div class="author-details">
+                      <span class="name">Empereur Napoléon</span>
+                      <span class="handle">@LittleCorporal</span>
+                    </div>
+                    <span class="timestamp">October 10, 1805</span>
+                  </div>
+                  <p class="chronicle-text">
+                    We crossed the Austrian camps without firing a shot! A
+                    beautiful work. Our cannons will soon see the flowers of
+                    victory in Vienna! Soldier, get ready for the fight!
+                    #ViennaHereWeCome
+                  </p>
+                  <div class="chronicle-footer">
+                    <div class="footer-action">
+                      <svg viewBox="0 0 24 24">
+                        <path
+                          d="M21.99 4c0-1.1-.89-2-1.99-2H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h14l4 4-.01-18z"
+                        ></path>
+                      </svg>
+                      150K
+                    </div>
+                    <div class="footer-action">
+                      <svg viewBox="0 0 24 24">
+                        <path
+                          d="M7 7h10v3l4-4-4-4v3H5v6h2V7zm10 10H7v-3l-4 4 4 4v-3h12v-6h-2v4z"
+                        ></path>
+                      </svg>
+                      900K
+                    </div>
+                    <div class="footer-action">
+                      <svg viewBox="0 0 24 24">
+                        <path
+                          d="m12 21.35-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54Z"
+                        ></path>
+                      </svg>
+                      5.5M
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="chronicle">
+                <img
+                  src="https://blog.napoleon-cologne.fr/wp-content/uploads/2021/04/bicentenaire-napoleon-bonaparte-mort-1024x683.jpg"
+                  alt="Author Icon"
+                  class="author-icon"
+                />
+                <div class="chronicle-content">
+                  <div class="chronicle-header">
+                    <div class="author-details">
+                      <span class="name">Empereur Napoléon</span>
+                      <span class="handle">@LittleCorporal</span>
+                    </div>
+                    <span class="timestamp">November 28, 1805</span>
+                  </div>
+                  <p class="chronicle-text">
+                    I have sent General Savary to His Majesty
+                    <span class="mention">@TsarAlexander</span> to request an
+                    interview towards an armistice. Our willingness for dialogue
+                    remains. #PeaceEfforts #Diplomacy
+                  </p>
+                  <div class="chronicle-footer">
+                    <div class="footer-action">
+                      <svg viewBox="0 0 24 24">
+                        <path
+                          d="M21.99 4c0-1.1-.89-2-1.99-2H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h14l4 4-.01-18z"
+                        ></path>
+                      </svg>
+                      60K
+                    </div>
+                    <div class="footer-action">
+                      <svg viewBox="0 0 24 24">
+                        <path
+                          d="M7 7h10v3l4-4-4-4v3H5v6h2V7zm10 10H7v-3l-4 4 4 4v-3h12v-6h-2v4z"
+                        ></path>
+                      </svg>
+                      380K
+                    </div>
+                    <div class="footer-action">
+                      <svg viewBox="0 0 24 24">
+                        <path
+                          d="m12 21.35-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54Z"
+                        ></path>
+                      </svg>
+                      2.1M
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="chronicle">
+                <img
+                  src="https://blog.napoleon-cologne.fr/wp-content/uploads/2021/04/bicentenaire-napoleon-bonaparte-mort-1024x683.jpg"
+                  alt="Author Icon"
+                  class="author-icon"
+                />
+                <div class="chronicle-content">
+                  <div class="chronicle-header">
+                    <div class="author-details">
+                      <span class="name">Empereur Napoléon</span>
+                      <span class="handle">@LittleCorporal</span>
+                    </div>
+                    <span class="timestamp">November 29, 1805</span>
+                  </div>
+                  <p class="chronicle-text">
+                    His Majesty
+                    <span class="mention">@TsarAlexander</span> prefers not to
+                    see me. He sends Prince Dolgorukov instead. I will go.
+                  </p>
+                  <div class="chronicle-footer">
+                    <div class="footer-action">
+                      <svg viewBox="0 0 24 24">
+                        <path
+                          d="M21.99 4c0-1.1-.89-2-1.99-2H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h14l4 4-.01-18z"
+                        ></path>
+                      </svg>
+                      70K
+                    </div>
+                    <div class="footer-action">
+                      <svg viewBox="0 0 24 24">
+                        <path
+                          d="M7 7h10v3l4-4-4-4v3H5v6h2V7zm10 10H7v-3l-4 4 4 4v-3h12v-6h-2v4z"
+                        ></path>
+                      </svg>
+                      420K
+                    </div>
+                    <div class="footer-action">
+                      <svg viewBox="0 0 24 24">
+                        <path
+                          d="m12 21.35-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54Z"
+                        ></path>
+                      </svg>
+                      2.5M
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="chronicle">
+                <img
+                  src="https://blog.napoleon-cologne.fr/wp-content/uploads/2021/04/bicentenaire-napoleon-bonaparte-mort-1024x683.jpg"
+                  alt="Author Icon"
+                  class="author-icon"
+                />
+                <div class="chronicle-content">
+                  <div class="chronicle-header">
+                    <div class="author-details">
+                      <span class="name">Empereur Napoléon</span>
+                      <span class="handle">@LittleCorporal</span>
+                    </div>
+                    <span class="timestamp">November 30, 1805</span>
+                  </div>
+                  <p class="chronicle-text">
+                    To Prince Dolgorukov, on their absurd peace terms: 'I am
+                    Emperor, sir. You should not have bothered to come! Have you
+                    no tact nor moderation! If the propositions of the Emperors
+                    are so silly, we will debate our differences in another
+                    place.'
+                  </p>
+                  <div class="chronicle-footer">
+                    <div class="footer-action">
+                      <svg viewBox="0 0 24 24">
+                        <path
+                          d="M21.99 4c0-1.1-.89-2-1.99-2H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h14l4 4-.01-18z"
+                        ></path>
+                      </svg>
+                      100K
+                    </div>
+                    <div class="footer-action">
+                      <svg viewBox="0 0 24 24">
+                        <path
+                          d="M7 7h10v3l4-4-4-4v3H5v6h2V7zm10 10H7v-3l-4 4 4 4v-3h12v-6h-2v4z"
+                        ></path>
+                      </svg>
+                      590K
+                    </div>
+                    <div class="footer-action">
+                      <svg viewBox="0 0 24 24">
+                        <path
+                          d="m12 21.35-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54Z"
+                        ></path>
+                      </svg>
+                      3.8M
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="chronicle">
+                <img
+                  src="https://blog.napoleon-cologne.fr/wp-content/uploads/2021/04/bicentenaire-napoleon-bonaparte-mort-1024x683.jpg"
+                  alt="Author Icon"
+                  class="author-icon"
+                />
+                <div class="chronicle-content">
+                  <div class="chronicle-header">
+                    <div class="author-details">
+                      <span class="name">Empereur Napoléon</span>
+                      <span class="handle">@LittleCorporal</span>
+                    </div>
+                    <span class="timestamp">November 30, 1805</span>
+                  </div>
+                  <p class="chronicle-text">
+                    Reports indicate the capitulation of enemy troops at
+                    Wischau. A swift and decisive engagement. The
+                    <span class="mention">@AustrianEmpire</span> and
+                    <span class="mention">@RussianEmpire</span> Emperors now
+                    occupy Austerlitz castle; our evacuation was executed
+                    without loss. All according to plan. #Wischau #Austerlitz
+                  </p>
+                  <div class="chronicle-footer">
+                    <div class="footer-action">
+                      <svg viewBox="0 0 24 24">
+                        <path
+                          d="M21.99 4c0-1.1-.89-2-1.99-2H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h14l4 4-.01-18z"
+                        ></path>
+                      </svg>
+                      100K
+                    </div>
+                    <div class="footer-action">
+                      <svg viewBox="0 0 24 24">
+                        <path
+                          d="M7 7h10v3l4-4-4-4v3H5v6h2V7zm10 10H7v-3l-4 4 4 4v-3h12v-6h-2v4z"
+                        ></path>
+                      </svg>
+                      590K
+                    </div>
+                    <div class="footer-action">
+                      <svg viewBox="0 0 24 24">
+                        <path
+                          d="m12 21.35-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54Z"
+                        ></path>
+                      </svg>
+                      3.8M
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="chronicle">
+                <img
+                  src="https://blog.napoleon-cologne.fr/wp-content/uploads/2021/04/bicentenaire-napoleon-bonaparte-mort-1024x683.jpg"
+                  alt="Author Icon"
+                  class="author-icon"
+                />
+                <div class="chronicle-content">
+                  <div class="chronicle-header">
+                    <div class="author-details">
+                      <span class="name">Empereur Napoléon</span>
+                      <span class="handle">@LittleCorporal</span>
+                    </div>
+                    <span class="timestamp">December 1, 1805</span>
+                  </div>
+                  <p class="chronicle-text">
+                    Soldiers! The
+                    <span class="mention">@RussianEmpire</span> army comes to
+                    avenge Ulm. Our positions are formidable. When they march to
+                    the right, they will present their flank. This victory will
+                    seal the campaign. The peace we win will be worthy of you
+                    and my people. #Austerlitz
+                  </p>
+                  <div class="chronicle-footer">
+                    <div class="footer-action">
+                      <svg viewBox="0 0 24 24">
+                        <path
+                          d="M21.99 4c0-1.1-.89-2-1.99-2H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h14l4 4-.01-18z"
+                        ></path>
+                      </svg>
+                      180K
+                    </div>
+                    <div class="footer-action">
+                      <svg viewBox="0 0 24 24">
+                        <path
+                          d="M7 7h10v3l4-4-4-4v3H5v6h2V7zm10 10H7v-3l-4 4 4 4v-3h12v-6h-2v4z"
+                        ></path>
+                      </svg>
+                      1.1M
+                    </div>
+                    <div class="footer-action">
+                      <svg viewBox="0 0 24 24">
+                        <path
+                          d="m12 21.35-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54Z"
+                        ></path>
+                      </svg>
+                      6.5M
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="chronicle">
+                <img
+                  src="https://blog.napoleon-cologne.fr/wp-content/uploads/2021/04/bicentenaire-napoleon-bonaparte-mort-1024x683.jpg"
+                  alt="Author Icon"
+                  class="author-icon"
+                />
+                <div class="chronicle-content">
+                  <div class="chronicle-header">
+                    <div class="author-details">
+                      <span class="name">Empereur Napoléon</span>
+                      <span class="handle">@LittleCorporal</span>
+                    </div>
+                    <span class="timestamp">December 1, 1805</span>
+                  </div>
+                  <p class="chronicle-text">
+                    'Superb arrogance! Your Emperor reveals to us his plan of
+                    battle! He thinks we are so stupid that we will change ours?
+                    What naivety!' So says Prince Dolgorukov. Their
+                    overconfidence is a gift. #Miscalculation
+                  </p>
+                  <div class="chronicle-footer">
+                    <div class="footer-action">
+                      <svg viewBox="0 0 24 24">
+                        <path
+                          d="M21.99 4c0-1.1-.89-2-1.99-2H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h14l4 4-.01-18z"
+                        ></path>
+                      </svg>
+                      200K
+                    </div>
+                    <div class="footer-action">
+                      <svg viewBox="0 0 24 24">
+                        <path
+                          d="M7 7h10v3l4-4-4-4v3H5v6h2V7zm10 10H7v-3l-4 4 4 4v-3h12v-6h-2v4z"
+                        ></path>
+                      </svg>
+                      1.2M
+                    </div>
+                    <div class="footer-action">
+                      <svg viewBox="0 0 24 24">
+                        <path
+                          d="m12 21.35-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54Z"
+                        ></path>
+                      </svg>
+                      7.0M
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="chronicle">
+                <img
+                  src="https://blog.napoleon-cologne.fr/wp-content/uploads/2021/04/bicentenaire-napoleon-bonaparte-mort-1024x683.jpg"
+                  alt="Author Icon"
+                  class="author-icon"
+                />
+                <div class="chronicle-content">
+                  <div class="chronicle-header">
+                    <div class="author-details">
+                      <span class="name">Empereur Napoléon</span>
+                      <span class="handle">@LittleCorporal</span>
+                    </div>
+                    <span class="timestamp">December 1, 1805</span>
+                  </div>
+                  <p class="chronicle-text">
+                    Best night of my life, spending it with
+                    <span class="mention">LaGrandArmée</span>
+                  </p>
+                  <div class="chronicle-footer">
+                    <div class="footer-action">
+                      <svg viewBox="0 0 24 24">
+                        <path
+                          d="M21.99 4c0-1.1-.89-2-1.99-2H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h14l4 4-.01-18z"
+                        ></path>
+                      </svg>
+                      220K
+                    </div>
+                    <div class="footer-action">
+                      <svg viewBox="0 0 24 24">
+                        <path
+                          d="M7 7h10v3l4-4-4-4v3H5v6h2V7zm10 10H7v-3l-4 4 4 4v-3h12v-6h-2v4z"
+                        ></path>
+                      </svg>
+                      1.3M
+                    </div>
+                    <div class="footer-action">
+                      <svg viewBox="0 0 24 24">
+                        <path
+                          d="m12 21.35-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54Z"
+                        ></path>
+                      </svg>
+                      7.5M
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="chronicle">
+                <img
+                  src="https://blog.napoleon-cologne.fr/wp-content/uploads/2021/04/bicentenaire-napoleon-bonaparte-mort-1024x683.jpg"
+                  alt="Author Icon"
+                  class="author-icon"
+                />
+                <div class="chronicle-content">
+                  <div class="chronicle-header">
+                    <div class="author-details">
+                      <span class="name">Empereur Napoléon</span>
+                      <span class="handle">@LittleCorporal</span>
+                    </div>
+                    <span class="timestamp">December 1, 1805</span>
+                  </div>
+                  <p class="chronicle-text">
+                    They think we're burning our camps to cover the retreat.
+                  </p>
+                  <div class="chronicle-footer">
+                    <div class="footer-action">
+                      <svg viewBox="0 0 24 24">
+                        <path
+                          d="M21.99 4c0-1.1-.89-2-1.99-2H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h14l4 4-.01-18z"
+                        ></path>
+                      </svg>
+                      220K
+                    </div>
+                    <div class="footer-action">
+                      <svg viewBox="0 0 24 24">
+                        <path
+                          d="M7 7h10v3l4-4-4-4v3H5v6h2V7zm10 10H7v-3l-4 4 4 4v-3h12v-6h-2v4z"
+                        ></path>
+                      </svg>
+                      1.3M
+                    </div>
+                    <div class="footer-action">
+                      <svg viewBox="0 0 24 24">
+                        <path
+                          d="m12 21.35-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54Z"
+                        ></path>
+                      </svg>
+                      7.5M
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="chronicle">
+                <img
+                  src="https://blog.napoleon-cologne.fr/wp-content/uploads/2021/04/bicentenaire-napoleon-bonaparte-mort-1024x683.jpg"
+                  alt="Author Icon"
+                  class="author-icon"
+                />
+                <div class="chronicle-content">
+                  <div class="chronicle-header">
+                    <div class="author-details">
+                      <span class="name">Empereur Napoléon</span>
+                      <span class="handle">@LittleCorporal</span>
+                    </div>
+                    <span class="timestamp">December 1, 1805</span>
+                  </div>
+                  <p class="chronicle-text">
+                    The fog is thickening in the valley. It is a gift from
+                    heaven. The fog favors us.
+                  </p>
+                  <div class="chronicle-footer">
+                    <div class="footer-action">
+                      <svg viewBox="0 0 24 24">
+                        <path
+                          d="M21.99 4c0-1.1-.89-2-1.99-2H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h14l4 4-.01-18z"
+                        ></path>
+                      </svg>
+                      300K
+                    </div>
+                    <div class="footer-action">
+                      <svg viewBox="0 0 24 24">
+                        <path
+                          d="M7 7h10v3l4-4-4-4v3H5v6h2V7zm10 10H7v-3l-4 4 4 4v-3h12v-6h-2v4z"
+                        ></path>
+                      </svg>
+                      1.8M
+                    </div>
+                    <div class="footer-action">
+                      <svg viewBox="0 0 24 24">
+                        <path
+                          d="m12 21.35-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54Z"
+                        ></path>
+                      </svg>
+                      10.0M
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="chronicle">
+                <img
+                  src="https://blog.napoleon-cologne.fr/wp-content/uploads/2021/04/bicentenaire-napoleon-bonaparte-mort-1024x683.jpg"
+                  alt="Author Icon"
+                  class="author-icon"
+                />
+                <div class="chronicle-content">
+                  <div class="chronicle-header">
+                    <div class="author-details">
+                      <span class="name">Empereur Napoléon</span>
+                      <span class="handle">@LittleCorporal</span>
+                    </div>
+                    <span class="timestamp">December 1, 1805</span>
+                  </div>
+                  <p class="chronicle-text">
+                    'The French are doomed.' So say my enemies. They hail their
+                    own destruction as a gift from heaven. Truly astonishing.
+                  </p>
+                  <div class="chronicle-footer">
+                    <div class="footer-action">
+                      <svg viewBox="0 0 24 24">
+                        <path
+                          d="M21.99 4c0-1.1-.89-2-1.99-2H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h14l4 4-.01-18z"
+                        ></path>
+                      </svg>
+                      400K
+                    </div>
+                    <div class="footer-action">
+                      <svg viewBox="0 0 24 24">
+                        <path
+                          d="M7 7h10v3l4-4-4-4v3H5v6h2V7zm10 10H7v-3l-4 4 4 4v-3h12v-6h-2v4z"
+                        ></path>
+                      </svg>
+                      2.0M
+                    </div>
+                    <div class="footer-action">
+                      <svg viewBox="0 0 24 24">
+                        <path
+                          d="m12 21.35-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54Z"
+                        ></path>
+                      </svg>
+                      12.0M
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="chronicle">
+                <img
+                  src="https://blog.napoleon-cologne.fr/wp-content/uploads/2021/04/bicentenaire-napoleon-bonaparte-mort-1024x683.jpg"
+                  alt="Author Icon"
+                  class="author-icon"
+                />
+                <div class="chronicle-content">
+                  <div class="chronicle-header">
+                    <div class="author-details">
+                      <span class="name">Empereur Napoléon</span>
+                      <span class="handle">@LittleCorporal</span>
+                    </div>
+                    <span class="timestamp">December 1, 1805</span>
+                  </div>
+                  <p class="chronicle-text">
+                    Chaos in their command. Generals refuse orders, contradict
+                    each other. 'The battle is lost if I do not break their
+                    center. Remain on the plateau, and we are saved!' Such
+                    infighting guarantees their defeat.
+                  </p>
+                  <div class="chronicle-footer">
+                    <div class="footer-action">
+                      <svg viewBox="0 0 24 24">
+                        <path
+                          d="M21.99 4c0-1.1-.89-2-1.99-2H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h14l4 4-.01-18z"
+                        ></path>
+                      </svg>
+                      450K
+                    </div>
+                    <div class="footer-action">
+                      <svg viewBox="0 0 24 24">
+                        <path
+                          d="M7 7h10v3l4-4-4-4v3H5v6h2V7zm10 10H7v-3l-4 4 4 4v-3h12v-6h-2v4z"
+                        ></path>
+                      </svg>
+                      2.2M
+                    </div>
+                    <div class="footer-action">
+                      <svg viewBox="0 0 24 24">
+                        <path
+                          d="m12 21.35-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54Z"
+                        ></path>
+                      </svg>
+                      13.0M
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="chronicle">
+                <img
+                  src="https://blog.napoleon-cologne.fr/wp-content/uploads/2021/04/bicentenaire-napoleon-bonaparte-mort-1024x683.jpg"
+                  alt="Author Icon"
+                  class="author-icon"
+                />
+                <div class="chronicle-content">
+                  <div class="chronicle-header">
+                    <div class="author-details">
+                      <span class="name">Empereur Napoléon</span>
+                      <span class="handle">@LittleCorporal</span>
+                    </div>
+                    <span class="timestamp">December 1, 1805</span>
+                  </div>
+                  <p class="chronicle-text">
+                    Orders from their Majesties to descend are given. Even their
+                    own generals admit: 'But they don't know what it is that
+                    they're doing!' The cost of amateur leadership.
+                  </p>
+                  <div class="chronicle-footer">
+                    <div class="footer-action">
+                      <svg viewBox="0 0 24 24">
+                        <path
+                          d="M21.99 4c0-1.1-.89-2-1.99-2H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h14l4 4-.01-18z"
+                        ></path>
+                      </svg>
+                      480K
+                    </div>
+                    <div class="footer-action">
+                      <svg viewBox="0 0 24 24">
+                        <path
+                          d="M7 7h10v3l4-4-4-4v3H5v6h2V7zm10 10H7v-3l-4 4 4 4v-3h12v-6h-2v4z"
+                        ></path>
+                      </svg>
+                      2.4M
+                    </div>
+                    <div class="footer-action">
+                      <svg viewBox="0 0 24 24">
+                        <path
+                          d="m12 21.35-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54Z"
+                        ></path>
+                      </svg>
+                      14.0M
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="chronicle">
+                <img
+                  src="https://blog.napoleon-cologne.fr/wp-content/uploads/2021/04/bicentenaire-napoleon-bonaparte-mort-1024x683.jpg"
+                  alt="Author Icon"
+                  class="author-icon"
+                />
+                <div class="chronicle-content">
+                  <div class="chronicle-header">
+                    <div class="author-details">
+                      <span class="name">Empereur Napoléon</span>
+                      <span class="handle">@LittleCorporal</span>
+                    </div>
+                    <span class="timestamp">December 1, 1805</span>
+                  </div>
+                  <p class="chronicle-text">
+                    The Pratzen plateau is clear. The enemy descends en masse,
+                    using the fog. The moment has arrived.
+                  </p>
+                  <div class="chronicle-footer">
+                    <div class="footer-action">
+                      <svg viewBox="0 0 24 24">
+                        <path
+                          d="M21.99 4c0-1.1-.89-2-1.99-2H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h14l4 4-.01-18z"
+                        ></path>
+                      </svg>
+                      500K
+                    </div>
+                    <div class="footer-action">
+                      <svg viewBox="0 0 24 24">
+                        <path
+                          d="M7 7h10v3l4-4-4-4v3H5v6h2V7zm10 10H7v-3l-4 4 4 4v-3h12v-6h-2v4z"
+                        ></path>
+                      </svg>
+                      2.5M
+                    </div>
+                    <div class="footer-action">
+                      <svg viewBox="0 0 24 24">
+                        <path
+                          d="m12 21.35-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54Z"
+                        ></path>
+                      </svg>
+                      15.0M
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="chronicle">
+                <img
+                  src="https://blog.napoleon-cologne.fr/wp-content/uploads/2021/04/bicentenaire-napoleon-bonaparte-mort-1024x683.jpg"
+                  alt="Author Icon"
+                  class="author-icon"
+                />
+                <div class="chronicle-content">
+                  <div class="chronicle-header">
+                    <div class="author-details">
+                      <span class="name">Empereur Napoléon</span>
+                      <span class="handle">@LittleCorporal</span>
+                    </div>
+                    <span class="timestamp">December 02, 1805</span>
+                  </div>
+                  <p class="chronicle-text">
+                    The Sun of Austerlitz rises. All predictions confirmed. The
+                    enemy is making their critical mistake, massing on our
+                    right. Their pride will be confounded. This war will end
+                    like a lightning strike! The enemy army will be destroyed
+                    today.
+                  </p>
+                  <div class="chronicle-footer">
+                    <div class="footer-action">
+                      <svg viewBox="0 0 24 24">
+                        <path
+                          d="M21.99 4c0-1.1-.89-2-1.99-2H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h14l4 4-.01-18z"
+                        ></path>
+                      </svg>
+                      300K
+                    </div>
+                    <div class="footer-action">
+                      <svg viewBox="0 0 24 24">
+                        <path
+                          d="M7 7h10v3l4-4-4-4v3H5v6h2V7zm10 10H7v-3l-4 4 4 4v-3h12v-6h-2v4z"
+                        ></path>
+                      </svg>
+                      1.8M
+                    </div>
+                    <div class="footer-action">
+                      <svg viewBox="0 0 24 24">
+                        <path
+                          d="m12 21.35-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54Z"
+                        ></path>
+                      </svg>
+                      10.0M
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="chronicle">
+                <img
+                  src="https://blog.napoleon-cologne.fr/wp-content/uploads/2021/04/bicentenaire-napoleon-bonaparte-mort-1024x683.jpg"
+                  alt="Author Icon"
+                  class="author-icon"
+                />
+                <div class="chronicle-content">
+                  <div class="chronicle-header">
+                    <div class="author-details">
+                      <span class="name">Empereur Napoléon</span>
+                      <span class="handle">@LittleCorporal</span>
+                    </div>
+                    <span class="timestamp">December 2, 1805</span>
+                  </div>
+                  <p class="chronicle-text">
+                    Soldiers! This campaign must end with a withering blow!
+                    #ForFrance
+                  </p>
+                  <div class="chronicle-footer">
+                    <div class="footer-action">
+                      <svg viewBox="0 0 24 24">
+                        <path
+                          d="M21.99 4c0-1.1-.89-2-1.99-2H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h14l4 4-.01-18z"
+                        ></path>
+                      </svg>
+                      450K
+                    </div>
+                    <div class="footer-action">
+                      <svg viewBox="0 0 24 24">
+                        <path
+                          d="M7 7h10v3l4-4-4-4v3H5v6h2V7zm10 10H7v-3l-4 4 4 4v-3h12v-6h-2v4z"
+                        ></path>
+                      </svg>
+                      2.2M
+                    </div>
+                    <div class="footer-action">
+                      <svg viewBox="0 0 24 24">
+                        <path
+                          d="m12 21.35-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54Z"
+                        ></path>
+                      </svg>
+                      13.0M
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="chronicle">
+                <img
+                  src="https://blog.napoleon-cologne.fr/wp-content/uploads/2021/04/bicentenaire-napoleon-bonaparte-mort-1024x683.jpg"
+                  alt="Author Icon"
+                  class="author-icon"
+                />
+                <div class="chronicle-content">
+                  <div class="chronicle-header">
+                    <div class="author-details">
+                      <span class="name">Empereur Napoléon</span>
+                      <span class="handle">@LittleCorporal</span>
+                    </div>
+                    <span class="timestamp">December 2, 1805</span>
+                  </div>
+                  <p class="chronicle-text">
+                    The first columns of the
+                    <span class="mention">@RussianEmpire</span>
+                    are committing suicide! Before this day ends, I will defeat
+                    this army!
+                  </p>
+                  <div class="chronicle-footer">
+                    <div class="footer-action">
+                      <svg viewBox="0 0 24 24">
+                        <path
+                          d="M21.99 4c0-1.1-.89-2-1.99-2H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h14l4 4-.01-18z"
+                        ></path>
+                      </svg>
+                      480K
+                    </div>
+                    <div class="footer-action">
+                      <svg viewBox="0 0 24 24">
+                        <path
+                          d="M7 7h10v3l4-4-4-4v3H5v6h2V7zm10 10H7v-3l-4 4 4 4v-3h12v-6h-2v4z"
+                        ></path>
+                      </svg>
+                      2.4M
+                    </div>
+                    <div class="footer-action">
+                      <svg viewBox="0 0 24 24">
+                        <path
+                          d="m12 21.35-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54Z"
+                        ></path>
+                      </svg>
+                      14.0M
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="chronicle">
+                <img
+                  src="https://blog.napoleon-cologne.fr/wp-content/uploads/2021/04/bicentenaire-napoleon-bonaparte-mort-1024x683.jpg"
+                  alt="Author Icon"
+                  class="author-icon"
+                />
+                <div class="chronicle-content">
+                  <div class="chronicle-header">
+                    <div class="author-details">
+                      <span class="name">Empereur Napoléon</span>
+                      <span class="handle">@LittleCorporal</span>
+                    </div>
+                    <span class="timestamp">December 2, 1805</span>
+                  </div>
+                  <p class="chronicle-text">
+                    The battlefield is a grand canvas! Lannes, Suchet,
+                    Caffarelli, Kellerman poised. The main mass of the enemy is
+                    in sight.
+                  </p>
+                  <div class="chronicle-footer">
+                    <div class="footer-action">
+                      <svg viewBox="0 0 24 24">
+                        <path
+                          d="M21.99 4c0-1.1-.89-2-1.99-2H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h14l4 4-.01-18z"
+                        ></path>
+                      </svg>
+                      500K
+                    </div>
+                    <div class="footer-action">
+                      <svg viewBox="0 0 24 24">
+                        <path
+                          d="M7 7h10v3l4-4-4-4v3H5v6h2V7zm10 10H7v-3l-4 4 4 4v-3h12v-6h-2v4z"
+                        ></path>
+                      </svg>
+                      2.5M
+                    </div>
+                    <div class="footer-action">
+                      <svg viewBox="0 0 24 24">
+                        <path
+                          d="m12 21.35-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54Z"
+                        ></path>
+                      </svg>
+                      15.0M
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="chronicle">
+                <img
+                  src="https://blog.napoleon-cologne.fr/wp-content/uploads/2021/04/bicentenaire-napoleon-bonaparte-mort-1024x683.jpg"
+                  alt="Author Icon"
+                  class="author-icon"
+                />
+                <div class="chronicle-content">
+                  <div class="chronicle-header">
+                    <div class="author-details">
+                      <span class="name">Empereur Napoléon</span>
+                      <span class="handle">@LittleCorporal</span>
+                    </div>
+                    <span class="timestamp">December 2, 1805</span>
+                  </div>
+                  <p class="chronicle-text">
+                    82 squadrons of
+                    <span class="mention">@AustrianEmpire</span> and
+                    <span class="mention">@RussianEmpire</span> against our
+                    forces. A battle of titans is ready!
+                  </p>
+                  <div class="chronicle-footer">
+                    <div class="footer-action">
+                      <svg viewBox="0 0 24 24">
+                        <path
+                          d="M21.99 4c0-1.1-.89-2-1.99-2H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h14l4 4-.01-18z"
+                        ></path>
+                      </svg>
+                      500K
+                    </div>
+                    <div class="footer-action">
+                      <svg viewBox="0 0 24 24">
+                        <path
+                          d="M7 7h10v3l4-4-4-4v3H5v6h2V7zm10 10H7v-3l-4 4 4 4v-3h12v-6h-2v4z"
+                        ></path>
+                      </svg>
+                      2.5M
+                    </div>
+                    <div class="footer-action">
+                      <svg viewBox="0 0 24 24">
+                        <path
+                          d="m12 21.35-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54Z"
+                        ></path>
+                      </svg>
+                      15.0M
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="chronicle">
+                <img
+                  src="https://blog.napoleon-cologne.fr/wp-content/uploads/2021/04/bicentenaire-napoleon-bonaparte-mort-1024x683.jpg"
+                  alt="Author Icon"
+                  class="author-icon"
+                />
+                <div class="chronicle-content">
+                  <div class="chronicle-header">
+                    <div class="author-details">
+                      <span class="name">Empereur Napoléon</span>
+                      <span class="handle">@LittleCorporal</span>
+                    </div>
+                    <span class="timestamp">December 2, 1805</span>
+                  </div>
+                  <p class="chronicle-text">
+                    This moment is so beautiful, so grand! It shall be captured
+                    for history's chapter on 2nd December: 'The Sun of
+                    Austerlitz!' #SunOfAusterlitz
+                  </p>
+                  <div class="chronicle-footer">
+                    <div class="footer-action">
+                      <svg viewBox="0 0 24 24">
+                        <path
+                          d="M21.99 4c0-1.1-.89-2-1.99-2H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h14l4 4-.01-18z"
+                        ></path>
+                      </svg>
+                      600K
+                    </div>
+                    <div class="footer-action">
+                      <svg viewBox="0 0 24 24">
+                        <path
+                          d="M7 7h10v3l4-4-4-4v3H5v6h2V7zm10 10H7v-3l-4 4 4 4v-3h12v-6h-2v4z"
+                        ></path>
+                      </svg>
+                      3.0M
+                    </div>
+                    <div class="footer-action">
+                      <svg viewBox="0 0 24 24">
+                        <path
+                          d="m12 21.35-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54Z"
+                        ></path>
+                      </svg>
+                      18.0M
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="chronicle">
+                <img
+                  src="https://blog.napoleon-cologne.fr/wp-content/uploads/2021/04/bicentenaire-napoleon-bonaparte-mort-1024x683.jpg"
+                  alt="Author Icon"
+                  class="author-icon"
+                />
+                <div class="chronicle-content">
+                  <div class="chronicle-header">
+                    <div class="author-details">
+                      <span class="name">Empereur Napoléon</span>
+                      <span class="handle">@LittleCorporal</span>
+                    </div>
+                    <span class="timestamp">December 2, 1805</span>
+                  </div>
+                  <p class="chronicle-text">
+                    They wanted the Pratzen plateau for dessert; we will offer
+                    it to them as a starter!
+                  </p>
+                  <div class="chronicle-footer">
+                    <div class="footer-action">
+                      <svg viewBox="0 0 24 24">
+                        <path
+                          d="M21.99 4c0-1.1-.89-2-1.99-2H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h14l4 4-.01-18z"
+                        ></path>
+                      </svg>
+                      500K
+                    </div>
+                    <div class="footer-action">
+                      <svg viewBox="0 0 24 24">
+                        <path
+                          d="M7 7h10v3l4-4-4-4v3H5v6h2V7zm10 10H7v-3l-4 4 4 4v-3h12v-6h-2v4z"
+                        ></path>
+                      </svg>
+                      2.5M
+                    </div>
+                    <div class="footer-action">
+                      <svg viewBox="0 0 24 24">
+                        <path
+                          d="m12 21.35-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54Z"
+                        ></path>
+                      </svg>
+                      15.0M
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="chronicle">
+                <img
+                  src="https://blog.napoleon-cologne.fr/wp-content/uploads/2021/04/bicentenaire-napoleon-bonaparte-mort-1024x683.jpg"
+                  alt="Author Icon"
+                  class="author-icon"
+                />
+                <div class="chronicle-content">
+                  <div class="chronicle-header">
+                    <div class="author-details">
+                      <span class="name">Empereur Napoléon</span>
+                      <span class="handle">@LittleCorporal</span>
+                    </div>
+                    <span class="timestamp">December 2, 1805</span>
+                  </div>
+                  <p class="chronicle-text">
+                    Music for the battalion! We will sing their plans to sleep.
+                    Forward to the music!
+                  </p>
+                  <div class="chronicle-footer">
+                    <div class="footer-action">
+                      <svg viewBox="0 0 24 24">
+                        <path
+                          d="M21.99 4c0-1.1-.89-2-1.99-2H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h14l4 4-.01-18z"
+                        ></path>
+                      </svg>
+                      500K
+                    </div>
+                    <div class="footer-action">
+                      <svg viewBox="0 0 24 24">
+                        <path
+                          d="M7 7h10v3l4-4-4-4v3H5v6h2V7zm10 10H7v-3l-4 4 4 4v-3h12v-6h-2v4z"
+                        ></path>
+                      </svg>
+                      2.5M
+                    </div>
+                    <div class="footer-action">
+                      <svg viewBox="0 0 24 24">
+                        <path
+                          d="m12 21.35-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54Z"
+                        ></path>
+                      </svg>
+                      15.0M
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="chronicle">
+                <img
+                  src="https://blog.napoleon-cologne.fr/wp-content/uploads/2021/04/bicentenaire-napoleon-bonaparte-mort-1024x683.jpg"
+                  alt="Author Icon"
+                  class="author-icon"
+                />
+                <div class="chronicle-content">
+                  <div class="chronicle-header">
+                    <div class="author-details">
+                      <span class="name">Empereur Napoléon</span>
+                      <span class="handle">@LittleCorporal</span>
+                    </div>
+                    <span class="timestamp">December 2, 1805</span>
+                  </div>
+                  <p class="chronicle-text">
+                    A battalion of the Old Guard has attacked without orders!
+                    Such courage! This is the spirit of France!
+                  </p>
+                  <div class="chronicle-footer">
+                    <div class="footer-action">
+                      <svg viewBox="0 0 24 24">
+                        <path
+                          d="M21.99 4c0-1.1-.89-2-1.99-2H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h14l4 4-.01-18z"
+                        ></path>
+                      </svg>
+                      600K
+                    </div>
+                    <div class="footer-action">
+                      <svg viewBox="0 0 24 24">
+                        <path
+                          d="M7 7h10v3l4-4-4-4v3H5v6h2V7zm10 10H7v-3l-4 4 4 4v-3h12v-6h-2v4z"
+                        ></path>
+                      </svg>
+                      3.0M
+                    </div>
+                    <div class="footer-action">
+                      <svg viewBox="0 0 24 24">
+                        <path
+                          d="m12 21.35-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54Z"
+                        ></path>
+                      </svg>
+                      18.0M
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="chronicle">
+                <img
+                  src="https://blog.napoleon-cologne.fr/wp-content/uploads/2021/04/bicentenaire-napoleon-bonaparte-mort-1024x683.jpg"
+                  alt="Author Icon"
+                  class="author-icon"
+                />
+                <div class="chronicle-content">
+                  <div class="chronicle-header">
+                    <div class="author-details">
+                      <span class="name">Empereur Napoléon</span>
+                      <span class="handle">@LittleCorporal</span>
+                    </div>
+                    <span class="timestamp">December 2, 1805</span>
+                  </div>
+                  <p class="chronicle-text">Every soldier knows their duty.</p>
+                  <div class="chronicle-footer">
+                    <div class="footer-action">
+                      <svg viewBox="0 0 24 24">
+                        <path
+                          d="M21.99 4c0-1.1-.89-2-1.99-2H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h14l4 4-.01-18z"
+                        ></path>
+                      </svg>
+                      500K
+                    </div>
+                    <div class="footer-action">
+                      <svg viewBox="0 0 24 24">
+                        <path
+                          d="M7 7h10v3l4-4-4-4v3H5v6h2V7zm10 10H7v-3l-4 4 4 4v-3h12v-6h-2v4z"
+                        ></path>
+                      </svg>
+                      2.5M
+                    </div>
+                    <div class="footer-action">
+                      <svg viewBox="0 0 24 24">
+                        <path
+                          d="m12 21.35-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54Z"
+                        ></path>
+                      </svg>
+                      15.0M
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="chronicle">
+                <img
+                  src="https://blog.napoleon-cologne.fr/wp-content/uploads/2021/04/bicentenaire-napoleon-bonaparte-mort-1024x683.jpg"
+                  alt="Author Icon"
+                  class="author-icon"
+                />
+                <div class="chronicle-content">
+                  <div class="chronicle-header">
+                    <div class="author-details">
+                      <span class="name">Empereur Napoléon</span>
+                      <span class="handle">@LittleCorporal</span>
+                    </div>
+                    <span class="timestamp">December 2, 1805</span>
+                  </div>
+                  <p class="chronicle-text">
+                    Enemy reports: 'The French are at a 100 paces.' We are
+                    closer than they think.
+                  </p>
+                  <div class="chronicle-footer">
+                    <div class="footer-action">
+                      <svg viewBox="0 0 24 24">
+                        <path
+                          d="M21.99 4c0-1.1-.89-2-1.99-2H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h14l4 4-.01-18z"
+                        ></path>
+                      </svg>
+                      500K
+                    </div>
+                    <div class="footer-action">
+                      <svg viewBox="0 0 24 24">
+                        <path
+                          d="M7 7h10v3l4-4-4-4v3H5v6h2V7zm10 10H7v-3l-4 4 4 4v-3h12v-6h-2v4z"
+                        ></path>
+                      </svg>
+                      2.5M
+                    </div>
+                    <div class="footer-action">
+                      <svg viewBox="0 0 24 24">
+                        <path
+                          d="m12 21.35-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54Z"
+                        ></path>
+                      </svg>
+                      15.0M
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="chronicle">
+                <img
+                  src="https://blog.napoleon-cologne.fr/wp-content/uploads/2021/04/bicentenaire-napoleon-bonaparte-mort-1024x683.jpg"
+                  alt="Author Icon"
+                  class="author-icon"
+                />
+                <div class="chronicle-content">
+                  <div class="chronicle-header">
+                    <div class="author-details">
+                      <span class="name">Empereur Napoléon</span>
+                      <span class="handle">@LittleCorporal</span>
+                    </div>
+                    <span class="timestamp">December 2, 1805</span>
+                  </div>
+                  <p class="chronicle-text">
+                    Enemy lines are in panic: 'We have been betrayed! Save
+                    yourself if you can!' Chaos reigns among them.
+                    #EnemyCollapse #Disorder
+                  </p>
+                  <div class="chronicle-footer">
+                    <div class="footer-action">
+                      <svg viewBox="0 0 24 24">
+                        <path
+                          d="M21.99 4c0-1.1-.89-2-1.99-2H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h14l4 4-.01-18z"
+                        ></path>
+                      </svg>
+                      500K
+                    </div>
+                    <div class="footer-action">
+                      <svg viewBox="0 0 24 24">
+                        <path
+                          d="M7 7h10v3l4-4-4-4v3H5v6h2V7zm10 10H7v-3l-4 4 4 4v-3h12v-6h-2v4z"
+                        ></path>
+                      </svg>
+                      2.5M
+                    </div>
+                    <div class="footer-action">
+                      <svg viewBox="0 0 24 24">
+                        <path
+                          d="m12 21.35-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54Z"
+                        ></path>
+                      </svg>
+                      15.0M
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="chronicle">
+                <img
+                  src="https://blog.napoleon-cologne.fr/wp-content/uploads/2021/04/bicentenaire-napoleon-bonaparte-mort-1024x683.jpg"
+                  alt="Author Icon"
+                  class="author-icon"
+                />
+                <div class="chronicle-content">
+                  <div class="chronicle-header">
+                    <div class="author-details">
+                      <span class="name">Empereur Napoléon</span>
+                      <span class="handle">@LittleCorporal</span>
+                    </div>
+                    <span class="timestamp">December 2, 1805</span>
+                  </div>
+                  <p class="chronicle-text">
+                    Enemy forces attempt to capitalize on perceived French
+                    'panic,' seizing a village. A calculated move within a
+                    larger deception. #Misinterpretation #MyPlan
+                  </p>
+                  <div class="chronicle-footer">
+                    <div class="footer-action">
+                      <svg viewBox="0 0 24 24">
+                        <path
+                          d="M21.99 4c0-1.1-.89-2-1.99-2H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h14l4 4-.01-18z"
+                        ></path>
+                      </svg>
+                      500K
+                    </div>
+                    <div class="footer-action">
+                      <svg viewBox="0 0 24 24">
+                        <path
+                          d="M7 7h10v3l4-4-4-4v3H5v6h2V7zm10 10H7v-3l-4 4 4 4v-3h12v-6h-2v4z"
+                        ></path>
+                      </svg>
+                      2.5M
+                    </div>
+                    <div class="footer-action">
+                      <svg viewBox="0 0 24 24">
+                        <path
+                          d="m12 21.35-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54Z"
+                        ></path>
+                      </svg>
+                      15.0M
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="chronicle">
+                <img
+                  src="https://blog.napoleon-cologne.fr/wp-content/uploads/2021/04/bicentenaire-napoleon-bonaparte-mort-1024x683.jpg"
+                  alt="Author Icon"
+                  class="author-icon"
+                />
+                <div class="chronicle-content">
+                  <div class="chronicle-header">
+                    <div class="author-details">
+                      <span class="name">Empereur Napoléon</span>
+                      <span class="handle">@LittleCorporal</span>
+                    </div>
+                    <span class="timestamp">December 2, 1805</span>
+                  </div>
+                  <p class="chronicle-text">
+                    They confirm, 'They are already in Sokolnitz!' My forces are
+                    where they need to be. #Sokolnitz #Advance
+                  </p>
+                  <div class="chronicle-footer">
+                    <div class="footer-action">
+                      <svg viewBox="0 0 24 24">
+                        <path
+                          d="M21.99 4c0-1.1-.89-2-1.99-2H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h14l4 4-.01-18z"
+                        ></path>
+                      </svg>
+                      500K
+                    </div>
+                    <div class="footer-action">
+                      <svg viewBox="0 0 24 24">
+                        <path
+                          d="M7 7h10v3l4-4-4-4v3H5v6h2V7zm10 10H7v-3l-4 4 4 4v-3h12v-6h-2v4z"
+                        ></path>
+                      </svg>
+                      2.5M
+                    </div>
+                    <div class="footer-action">
+                      <svg viewBox="0 0 24 24">
+                        <path
+                          d="m12 21.35-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54Z"
+                        ></path>
+                      </svg>
+                      15.0M
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="chronicle">
+                <img
+                  src="https://blog.napoleon-cologne.fr/wp-content/uploads/2021/04/bicentenaire-napoleon-bonaparte-mort-1024x683.jpg"
+                  alt="Author Icon"
+                  class="author-icon"
+                />
+                <div class="chronicle-content">
+                  <div class="chronicle-header">
+                    <div class="author-details">
+                      <span class="name">Empereur Napoléon</span>
+                      <span class="handle">@LittleCorporal</span>
+                    </div>
+                    <span class="timestamp">December 2, 1805</span>
+                  </div>
+                  <p class="chronicle-text">
+                    Fire! Let the cannons speak! #Artillery #Devastation
+                  </p>
+                  <div class="chronicle-footer">
+                    <div class="footer-action">
+                      <svg viewBox="0 0 24 24">
+                        <path
+                          d="M21.99 4c0-1.1-.89-2-1.99-2H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h14l4 4-.01-18z"
+                        ></path>
+                      </svg>
+                      500K
+                    </div>
+                    <div class="footer-action">
+                      <svg viewBox="0 0 24 24">
+                        <path
+                          d="M7 7h10v3l4-4-4-4v3H5v6h2V7zm10 10H7v-3l-4 4 4 4v-3h12v-6h-2v4z"
+                        ></path>
+                      </svg>
+                      2.5M
+                    </div>
+                    <div class="footer-action">
+                      <svg viewBox="0 0 24 24">
+                        <path
+                          d="m12 21.35-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54Z"
+                        ></path>
+                      </svg>
+                      15.0M
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="chronicle">
+                <img
+                  src="https://blog.napoleon-cologne.fr/wp-content/uploads/2021/04/bicentenaire-napoleon-bonaparte-mort-1024x683.jpg"
+                  alt="Author Icon"
+                  class="author-icon"
+                />
+                <div class="chronicle-content">
+                  <div class="chronicle-header">
+                    <div class="author-details">
+                      <span class="name">Empereur Napoléon</span>
+                      <span class="handle">@LittleCorporal</span>
+                    </div>
+                    <span class="timestamp">December 2, 1805</span>
+                  </div>
+                  <p class="chronicle-text">
+                    What beauty! The battlefield unfolds as a grand masterpiece.
+                    #Aesthetic #Grandeur
+                  </p>
+                  <div class="chronicle-footer">
+                    <div class="footer-action">
+                      <svg viewBox="0 0 24 24">
+                        <path
+                          d="M21.99 4c0-1.1-.89-2-1.99-2H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h14l4 4-.01-18z"
+                        ></path>
+                      </svg>
+                      500K
+                    </div>
+                    <div class="footer-action">
+                      <svg viewBox="0 0 24 24">
+                        <path
+                          d="M7 7h10v3l4-4-4-4v3H5v6h2V7zm10 10H7v-3l-4 4 4 4v-3h12v-6h-2v4z"
+                        ></path>
+                      </svg>
+                      2.5M
+                    </div>
+                    <div class="footer-action">
+                      <svg viewBox="0 0 24 24">
+                        <path
+                          d="m12 21.35-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54Z"
+                        ></path>
+                      </svg>
+                      15.0M
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="chronicle">
+                <img
+                  src="https://blog.napoleon-cologne.fr/wp-content/uploads/2021/04/bicentenaire-napoleon-bonaparte-mort-1024x683.jpg"
+                  alt="Author Icon"
+                  class="author-icon"
+                />
+                <div class="chronicle-content">
+                  <div class="chronicle-header">
+                    <div class="author-details">
+                      <span class="name">Empereur Napoléon</span>
+                      <span class="handle">@LittleCorporal</span>
+                    </div>
+                    <span class="timestamp">December 2, 1805</span>
+                  </div>
+                  <p class="chronicle-text">
+                    At last, the Pratzen plateau is ours!
+                    <span class="mention">@MarshallSoult</span>, you are the
+                    finest operator in Europe! A strategic masterpiece.
+                    #PratzenSecured #TacticalGenius
+                  </p>
+                  <div class="chronicle-footer">
+                    <div class="footer-action">
+                      <svg viewBox="0 0 24 24">
+                        <path
+                          d="M21.99 4c0-1.1-.89-2-1.99-2H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h14l4 4-.01-18z"
+                        ></path>
+                      </svg>
+                      600K
+                    </div>
+                    <div class="footer-action">
+                      <svg viewBox="0 0 24 24">
+                        <path
+                          d="M7 7h10v3l4-4-4-4v3H5v6h2V7zm10 10H7v-3l-4 4 4 4v-3h12v-6h-2v4z"
+                        ></path>
+                      </svg>
+                      3.0M
+                    </div>
+                    <div class="footer-action">
+                      <svg viewBox="0 0 24 24">
+                        <path
+                          d="m12 21.35-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54Z"
+                        ></path>
+                      </svg>
+                      18.0M
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="chronicle">
+                <img
+                  src="https://blog.napoleon-cologne.fr/wp-content/uploads/2021/04/bicentenaire-napoleon-bonaparte-mort-1024x683.jpg"
+                  alt="Author Icon"
+                  class="author-icon"
+                />
+                <div class="chronicle-content">
+                  <div class="chronicle-header">
+                    <div class="author-details">
+                      <span class="name">Empereur Napoléon</span>
+                      <span class="handle">@LittleCorporal</span>
+                    </div>
+                    <span class="timestamp">December 2, 1805</span>
+                  </div>
+                  <p class="chronicle-text">
+                    The <span class="mention">@RussianEmpire</span> alliance is
+                    crushed! The
+                    <span class="mention">@AustrianEmpire</span> forces are
+                    annihilated! #TotalVictory #Unstoppable
+                  </p>
+                  <div class="chronicle-footer">
+                    <div class="footer-action">
+                      <svg viewBox="0 0 24 24">
+                        <path
+                          d="M21.99 4c0-1.1-.89-2-1.99-2H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h14l4 4-.01-18z"
+                        ></path>
+                      </svg>
+                      700K
+                    </div>
+                    <div class="footer-action">
+                      <svg viewBox="0 0 24 24">
+                        <path
+                          d="M7 7h10v3l4-4-4-4v3H5v6h2V7zm10 10H7v-3l-4 4 4 4v-3h12v-6h-2v4z"
+                        ></path>
+                      </svg>
+                      3.5M
+                    </div>
+                    <div class="footer-action">
+                      <svg viewBox="0 0 24 24">
+                        <path
+                          d="m12 21.35-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54Z"
+                        ></path>
+                      </svg>
+                      20.0M
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="chronicle">
+                <img
+                  src="https://blog.napoleon-cologne.fr/wp-content/uploads/2021/04/bicentenaire-napoleon-bonaparte-mort-1024x683.jpg"
+                  alt="Author Icon"
+                  class="author-icon"
+                />
+                <div class="chronicle-content">
+                  <div class="chronicle-header">
+                    <div class="author-details">
+                      <span class="name">Empereur Napoléon</span>
+                      <span class="handle">@LittleCorporal</span>
+                    </div>
+                    <span class="timestamp">December 2, 1805</span>
+                  </div>
+                  <p class="chronicle-text">
+                    My orders for Bernadotte on Pratzen: Fire on the enemy so as
+                    to drive them onto the frozen lakes. #Annihilation #NoEscape
+                  </p>
+                  <div class="chronicle-footer">
+                    <div class="footer-action">
+                      <svg viewBox="0 0 24 24">
+                        <path
+                          d="M21.99 4c0-1.1-.89-2-1.99-2H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h14l4 4-.01-18z"
+                        ></path>
+                      </svg>
+                      500K
+                    </div>
+                    <div class="footer-action">
+                      <svg viewBox="0 0 24 24">
+                        <path
+                          d="M7 7h10v3l4-4-4-4v3H5v6h2V7zm10 10H7v-3l-4 4 4 4v-3h12v-6h-2v4z"
+                        ></path>
+                      </svg>
+                      2.5M
+                    </div>
+                    <div class="footer-action">
+                      <svg viewBox="0 0 24 24">
+                        <path
+                          d="m12 21.35-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54Z"
+                        ></path>
+                      </svg>
+                      15.0M
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="chronicle">
+                <img
+                  src="https://blog.napoleon-cologne.fr/wp-content/uploads/2021/04/bicentenaire-napoleon-bonaparte-mort-1024x683.jpg"
+                  alt="Author Icon"
+                  class="author-icon"
+                />
+                <div class="chronicle-content">
+                  <div class="chronicle-header">
+                    <div class="author-details">
+                      <span class="name">Empereur Napoléon</span>
+                      <span class="handle">@LittleCorporal</span>
+                    </div>
+                    <span class="timestamp">December 2, 1805</span>
+                  </div>
+                  <p class="chronicle-text">
+                    The Battle of Austerlitz is won! In five hours, victory in
+                    Europe is secured. The
+                    <span class="mention">@RussianEmpire</span> alliance is
+                    collapsed,
+                    <span class="mention">@AustrianEmpire</span> cavalry
+                    crushed, their columns annihilated. #AusterlitzVictory
+                    #EuropeConquered
+                  </p>
+                  <div class="chronicle-footer">
+                    <div class="footer-action">
+                      <svg viewBox="0 0 24 24">
+                        <path
+                          d="M21.99 4c0-1.1-.89-2-1.99-2H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h14l4 4-.01-18z"
+                        ></path>
+                      </svg>
+                      700K
+                    </div>
+                    <div class="footer-action">
+                      <svg viewBox="0 0 24 24">
+                        <path
+                          d="M7 7h10v3l4-4-4-4v3H5v6h2V7zm10 10H7v-3l-4 4 4 4v-3h12v-6h-2v4z"
+                        ></path>
+                      </svg>
+                      3.5M
+                    </div>
+                    <div class="footer-action">
+                      <svg viewBox="0 0 24 24">
+                        <path
+                          d="m12 21.35-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54Z"
+                        ></path>
+                      </svg>
+                      20.0M
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="chronicle">
+                <img
+                  src="https://blog.napoleon-cologne.fr/wp-content/uploads/2021/04/bicentenaire-napoleon-bonaparte-mort-1024x683.jpg"
+                  alt="Author Icon"
+                  class="author-icon"
+                />
+                <div class="chronicle-content">
+                  <div class="chronicle-header">
+                    <div class="author-details">
+                      <span class="name">Empereur Napoléon</span>
+                      <span class="handle">@LittleCorporal</span>
+                    </div>
+                    <span class="timestamp">December 2, 1805</span>
+                  </div>
+                  <p class="chronicle-text">
+                    My soldiers, you have exceeded my expectations! I am
+                    immensely proud of your valor and achievement! #ProudEmperor
+                    #GrandeArmee
+                  </p>
+                  <div class="chronicle-footer">
+                    <div class="footer-action">
+                      <svg viewBox="0 0 24 24">
+                        <path
+                          d="M21.99 4c0-1.1-.89-2-1.99-2H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h14l4 4-.01-18z"
+                        ></path>
+                      </svg>
+                      800K
+                    </div>
+                    <div class="footer-action">
+                      <svg viewBox="0 0 24 24">
+                        <path
+                          d="M7 7h10v3l4-4-4-4v3H5v6h2V7zm10 10H7v-3l-4 4 4 4v-3h12v-6h-2v4z"
+                        ></path>
+                      </svg>
+                      4.0M
+                    </div>
+                    <div class="footer-action">
+                      <svg viewBox="0 0 24 24">
+                        <path
+                          d="m12 21.35-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54Z"
+                        ></path>
+                      </svg>
+                      25.0M
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="chronicle">
+                <img
+                  src="https://blog.napoleon-cologne.fr/wp-content/uploads/2021/04/bicentenaire-napoleon-bonaparte-mort-1024x683.jpg"
+                  alt="Author Icon"
+                  class="author-icon"
+                />
+                <div class="chronicle-content">
+                  <div class="chronicle-header">
+                    <div class="author-details">
+                      <span class="name">Empereur Napoléon</span>
+                      <span class="handle">@LittleCorporal</span>
+                    </div>
+                    <span class="timestamp">December 2, 1805</span>
+                  </div>
+                  <p class="chronicle-text">
+                    Decree: The State adopts the children of our fallen heroes
+                    at Austerlitz. Their widows will receive a 6,000 francs
+                    pension. France honors its brave. #NationalCare
+                    #FrenchHeroes
+                  </p>
+                  <div class="chronicle-footer">
+                    <div class="footer-action">
+                      <svg viewBox="0 0 24 24">
+                        <path
+                          d="M21.99 4c0-1.1-.89-2-1.99-2H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h14l4 4-.01-18z"
+                        ></path>
+                      </svg>
+                      250K
+                    </div>
+                    <div class="footer-action">
+                      <svg viewBox="0 0 24 24">
+                        <path
+                          d="M7 7h10v3l4-4-4-4v3H5v6h2V7zm10 10H7v-3l-4 4 4 4v-3h12v-6h-2v4z"
+                        ></path>
+                      </svg>
+                      1.5M
+                    </div>
+                    <div class="footer-action">
+                      <svg viewBox="0 0 24 24">
+                        <path
+                          d="m12 21.35-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54Z"
+                        ></path>
+                      </svg>
+                      10.0M
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="chronicle">
+                <img
+                  src="https://blog.napoleon-cologne.fr/wp-content/uploads/2021/04/bicentenaire-napoleon-bonaparte-mort-1024x683.jpg"
+                  alt="Author Icon"
+                  class="author-icon"
+                />
+                <div class="chronicle-content">
+                  <div class="chronicle-header">
+                    <div class="author-details">
+                      <span class="name">Empereur Napoléon</span>
+                      <span class="handle">@LittleCorporal</span>
+                    </div>
+                    <span class="timestamp">December 2, 1805</span>
+                  </div>
+                  <p class="chronicle-text">
+                    The grim reality of victory: Russians in the lakes, wounded
+                    everywhere. Ambulances overflow. Light fires. Use coats of
+                    the dead for the wounded. Silence, to hear those who can
+                    still be saved. #Aftermath #CostOfWar
+                  </p>
+                  <div class="chronicle-footer">
+                    <div class="footer-action">
+                      <svg viewBox="0 0 24 24">
+                        <path
+                          d="M21.99 4c0-1.1-.89-2-1.99-2H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h14l4 4-.01-18z"
+                        ></path>
+                      </svg>
+                      150K
+                    </div>
+                    <div class="footer-action">
+                      <svg viewBox="0 0 24 24">
+                        <path
+                          d="M7 7h10v3l4-4-4-4v3H5v6h2V7zm10 10H7v-3l-4 4 4 4v-3h12v-6h-2v4z"
+                        ></path>
+                      </svg>
+                      800K
+                    </div>
+                    <div class="footer-action">
+                      <svg viewBox="0 0 24 24">
+                        <path
+                          d="m12 21.35-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54Z"
+                        ></path>
+                      </svg>
+                      5.0M
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="chronicle">
+                <img
+                  src="https://blog.napoleon-cologne.fr/wp-content/uploads/2021/04/bicentenaire-napoleon-bonaparte-mort-1024x683.jpg"
+                  alt="Author Icon"
+                  class="author-icon"
+                />
+                <div class="chronicle-content">
+                  <div class="chronicle-header">
+                    <div class="author-details">
+                      <span class="name">Empereur Napoléon</span>
+                      <span class="handle">@LittleCorporal</span>
+                    </div>
+                    <span class="timestamp">December 2, 1805</span>
+                  </div>
+                  <p class="chronicle-text">
+                    The Castle of Austerlitz. Now the Headquarters of His
+                    Majesty the Emperor of France.
+                  </p>
+                  <div class="chronicle-footer">
+                    <div class="footer-action">
+                      <svg viewBox="0 0 24 24">
+                        <path
+                          d="M21.99 4c0-1.1-.89-2-1.99-2H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h14l4 4-.01-18z"
+                        ></path>
+                      </svg>
+                      200K
+                    </div>
+                    <div class="footer-action">
+                      <svg viewBox="0 0 24 24">
+                        <path
+                          d="M7 7h10v3l4-4-4-4v3H5v6h2V7zm10 10H7v-3l-4 4 4 4v-3h12v-6h-2v4z"
+                        ></path>
+                      </svg>
+                      1.2M
+                    </div>
+                    <div class="footer-action">
+                      <svg viewBox="0 0 24 24">
+                        <path
+                          d="m12 21.35-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54Z"
+                        ></path>
+                      </svg>
+                      8.0M
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="chronicle">
+                <img
+                  src="https://blog.napoleon-cologne.fr/wp-content/uploads/2021/04/bicentenaire-napoleon-bonaparte-mort-1024x683.jpg"
+                  alt="Author Icon"
+                  class="author-icon"
+                />
+                <div class="chronicle-content">
+                  <div class="chronicle-header">
+                    <div class="author-details">
+                      <span class="name">Empereur Napoléon</span>
+                      <span class="handle">@LittleCorporal</span>
+                    </div>
+                    <span class="timestamp">December 2, 1805</span>
+                  </div>
+                  <p class="chronicle-text">
+                    Total victory! The Emperors of
+                    <span class="mention">@AustrianEmpire</span> and
+                    <span class="mention">@TsarAlexander</span> have fled,
+                    alone, abandoning their troops on the road to Hungary.
+                    #Cowardice #Deserters
+                  </p>
+                  <div class="chronicle-footer">
+                    <div class="footer-action">
+                      <svg viewBox="0 0 24 24">
+                        <path
+                          d="M21.99 4c0-1.1-.89-2-1.99-2H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h14l4 4-.01-18z"
+                        ></path>
+                      </svg>
+                      500K
+                    </div>
+                    <div class="footer-action">
+                      <svg viewBox="0 0 24 24">
+                        <path
+                          d="M7 7h10v3l4-4-4-4v3H5v6h2V7zm10 10H7v-3l-4 4 4 4v-3h12v-6h-2v4z"
+                        ></path>
+                      </svg>
+                      2.5M
+                    </div>
+                    <div class="footer-action">
+                      <svg viewBox="0 0 24 24">
+                        <path
+                          d="m12 21.35-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54Z"
+                        ></path>
+                      </svg>
+                      15.0M
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="chronicle">
+                <img
+                  src="https://blog.napoleon-cologne.fr/wp-content/uploads/2021/04/bicentenaire-napoleon-bonaparte-mort-1024x683.jpg"
+                  alt="Author Icon"
+                  class="author-icon"
+                />
+                <div class="chronicle-content">
+                  <div class="chronicle-header">
+                    <div class="author-details">
+                      <span class="name">Empereur Napoléon</span>
+                      <span class="handle">@LittleCorporal</span>
+                    </div>
+                    <span class="timestamp">December 2, 1805</span>
+                  </div>
+                  <p class="chronicle-text">
+                    General Friant presents 45 colors taken from the enemy! A
+                    fitting tribute on the anniversary of my consecration.
+                    #SpoilsOfWar #Anniversary
+                  </p>
+                  <div class="chronicle-footer">
+                    <div class="footer-action">
+                      <svg viewBox="0 0 24 24">
+                        <path
+                          d="M21.99 4c0-1.1-.89-2-1.99-2H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h14l4 4-.01-18z"
+                        ></path>
+                      </svg>
+                      400K
+                    </div>
+                    <div class="footer-action">
+                      <svg viewBox="0 0 24 24">
+                        <path
+                          d="M7 7h10v3l4-4-4-4v3H5v6h2V7zm10 10H7v-3l-4 4 4 4v-3h12v-6h-2v4z"
+                        ></path>
+                      </svg>
+                      2.0M
+                    </div>
+                    <div class="footer-action">
+                      <svg viewBox="0 0 24 24">
+                        <path
+                          d="m12 21.35-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54Z"
+                        ></path>
+                      </svg>
+                      12.0M
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="chronicle">
+                <img
+                  src="https://blog.napoleon-cologne.fr/wp-content/uploads/2021/04/bicentenaire-napoleon-bonaparte-mort-1024x683.jpg"
+                  alt="Author Icon"
+                  class="author-icon"
+                />
+                <div class="chronicle-content">
+                  <div class="chronicle-header">
+                    <div class="author-details">
+                      <span class="name">Empereur Napoléon</span>
+                      <span class="handle">@LittleCorporal</span>
+                    </div>
+                    <span class="timestamp">December 2, 1805</span>
+                  </div>
+                  <p class="chronicle-text">
+                    The shouts of joy from my soldiers! The Marseillaise plays –
+                    a fitting anthem on this day, three years after my
+                    consecration. #Celebration #Marseillaise
+                  </p>
+                  <div class="chronicle-footer">
+                    <div class="footer-action">
+                      <svg viewBox="0 0 24 24">
+                        <path
+                          d="M21.99 4c0-1.1-.89-2-1.99-2H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h14l4 4-.01-18z"
+                        ></path>
+                      </svg>
+                      600K
+                    </div>
+                    <div class="footer-action">
+                      <svg viewBox="0 0 24 24">
+                        <path
+                          d="M7 7h10v3l4-4-4-4v3H5v6h2V7zm10 10H7v-3l-4 4 4 4v-3h12v-6h-2v4z"
+                        ></path>
+                      </svg>
+                      3.0M
+                    </div>
+                    <div class="footer-action">
+                      <svg viewBox="0 0 24 24">
+                        <path
+                          d="m12 21.35-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54Z"
+                        ></path>
+                      </svg>
+                      18.0M
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="chronicle">
+                <img
+                  src="https://blog.napoleon-cologne.fr/wp-content/uploads/2021/04/bicentenaire-napoleon-bonaparte-mort-1024x683.jpg"
+                  alt="Author Icon"
+                  class="author-icon"
+                />
+                <div class="chronicle-content">
+                  <div class="chronicle-header">
+                    <div class="author-details">
+                      <span class="name">Empereur Napoléon</span>
+                      <span class="handle">@LittleCorporal</span>
+                    </div>
+                    <span class="timestamp">December 2, 1805</span>
+                  </div>
+                  <p class="chronicle-text">
+                    Casualties: French-2,000. Enemy-4,000 dead, 30,000
+                    prisoners, 186 cannons captured. A victory unparalleled! All
+                    prisoners shall be freed. I only want to see free men.
+                    #Peace
+                  </p>
+                  <div class="chronicle-footer">
+                    <div class="footer-action">
+                      <svg viewBox="0 0 24 24">
+                        <path
+                          d="M21.99 4c0-1.1-.89-2-1.99-2H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h14l4 4-.01-18z"
+                        ></path>
+                      </svg>
+                      600K
+                    </div>
+                    <div class="footer-action">
+                      <svg viewBox="0 0 24 24">
+                        <path
+                          d="M7 7h10v3l4-4-4-4v3H5v6h2V7zm10 10H7v-3l-4 4 4 4v-3h12v-6h-2v4z"
+                        ></path>
+                      </svg>
+                      3.0M
+                    </div>
+                    <div class="footer-action">
+                      <svg viewBox="0 0 24 24">
+                        <path
+                          d="m12 21.35-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54Z"
+                        ></path>
+                      </svg>
+                      18.0M
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="chronicle">
+                <img
+                  src="https://blog.napoleon-cologne.fr/wp-content/uploads/2021/04/bicentenaire-napoleon-bonaparte-mort-1024x683.jpg"
+                  alt="Author Icon"
+                  class="author-icon"
+                />
+                <div class="chronicle-content">
+                  <div class="chronicle-header">
+                    <div class="author-details">
+                      <span class="name">Empereur Napoléon</span>
+                      <span class="handle">@LittleCorporal</span>
+                    </div>
+                    <span class="timestamp">December 2, 1805</span>
+                  </div>
+                  <p class="chronicle-text">
+                    Paris will bear witness! A Bridge of Austerlitz, two
+                    Triumphal Arches at Carrousel and Champs-Elysées, and a
+                    column from enemy cannons in Place Vendôme.
+                    #MonumentsOfGlory #Paris
+                  </p>
+                  <div class="chronicle-footer">
+                    <div class="footer-action">
+                      <svg viewBox="0 0 24 24">
+                        <path
+                          d="M21.99 4c0-1.1-.89-2-1.99-2H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h14l4 4-.01-18z"
+                        ></path>
+                      </svg>
+                      500K
+                    </div>
+                    <div class="footer-action">
+                      <svg viewBox="0 0 24 24">
+                        <path
+                          d="M7 7h10v3l4-4-4-4v3H5v6h2V7zm10 10H7v-3l-4 4 4 4v-3h12v-6h-2v4z"
+                        ></path>
+                      </svg>
+                      2.5M
+                    </div>
+                    <div class="footer-action">
+                      <svg viewBox="0 0 24 24">
+                        <path
+                          d="m12 21.35-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54Z"
+                        ></path>
+                      </svg>
+                      15.0M
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="chronicle">
+                <img
+                  src="https://blog.napoleon-cologne.fr/wp-content/uploads/2021/04/bicentenaire-napoleon-bonaparte-mort-1024x683.jpg"
+                  alt="Author Icon"
+                  class="author-icon"
+                />
+                <div class="chronicle-content">
+                  <div class="chronicle-header">
+                    <div class="author-details">
+                      <span class="name">Empereur Napoléon</span>
+                      <span class="handle">@LittleCorporal</span>
+                    </div>
+                    <span class="timestamp">December 2, 1805</span>
+                  </div>
+                  <p class="chronicle-text">
+                    Soldiers! Austerlitz is an immortal victory! An army of
+                    100,000, commanded by two Emperors, scattered or drowned in
+                    less than 5 hours. My people await you with joy! Of those at
+                    Austerlitz, it will forever be said: 'He was a brave man!'
+                    #AusterlitzProclamation #BraveMen
+                  </p>
+                  <div class="chronicle-footer">
+                    <div class="footer-action">
+                      <svg viewBox="0 0 24 24">
+                        <path
+                          d="M21.99 4c0-1.1-.89-2-1.99-2H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h14l4 4-.01-18z"
+                        ></path>
+                      </svg>
+                      700K
+                    </div>
+                    <div class="footer-action rt">
+                      <svg viewBox="0 0 24 24">
+                        <path
+                          d="M7 7h10v3l4-4-4-4v3H5v6h2V7zm10 10H7v-3l-4 4 4 4v-3h12v-6h-2v4z"
+                        ></path>
+                      </svg>
+                      3.5M
+                    </div>
+                    <div class="footer-action liked">
+                      <svg viewBox="0 0 24 24">
+                        <path
+                          d="m12 21.35-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54Z"
+                        ></path>
+                      </svg>
+                      20.0M
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <aside class="aside-section">
+        <div class="aside-card">
+          <h3>Trends for You</h3>
+          <div class="trend-item">
+            <div class="trend-category">Worldwide · Trending</div>
+            <div class="trend-name hot-trend">
+              #Austerlitz
+              <svg viewBox="0 0 24 24">
+                <path
+                  d="M13.5.67s.74 2.65.74 4.8c0 2.06-1.35 3.73-3.41 3.73-2.07 0-3.63-1.67-3.63-3.73l.03-.36C5.21 7.51 4 10.62 4 14c0 4.42 3.58 8 8 8s8-3.58 8-8C20 8.61 17.41 3.8 13.5.67zM11.71 19c-1.78 0-3.22-1.4-3.22-3.14 0-1.62 1.05-2.76 2.81-3.12 1.77-.36 3.6-1.21 4.62-2.58.39 1.29.59 2.65.59 4.04 0 2.65-2.15 4.8-4.8 4.8z"
+                ></path>
+              </svg>
+            </div>
+            <div class="trend-count">32M Posts</div>
+          </div>
+          <div class="trend-item">
+            <div class="trend-category">Politics · Trending</div>
+            <div class="trend-name">Third Coalition</div>
+            <div class="trend-count">4.21M Posts</div>
+          </div>
+          <div class="trend-item">
+            <div class="trend-category">Trending in France</div>
+            <div class="trend-name">Sun of Austerlitz</div>
+            <div class="trend-count">1.4M Posts</div>
+          </div>
+          <div class="trend-item">
+            <div class="trend-category">Military · Trending</div>
+            <div class="trend-name">Grande Armée</div>
+            <div class="trend-count">2.4M Posts</div>
+          </div>
+        </div>
+        <div class="aside-card">
+          <h3>Figures of the Era</h3>
+          <div class="follow-item">
+            <img
+              class="follow-avatar"
+              src="https://substackcdn.com/image/fetch/$s_!F49e!,f_auto,q_auto:good,fl_progressive:steep/https%3A%2F%2Fsubstack-post-media.s3.amazonaws.com%2Fpublic%2Fimages%2F48dc91fa-0950-4b59-8d6b-bfbe99bf0e9f_1514x1953.jpeg"
+              alt="Marshal Davout"
+            />
+            <div class="follow-info">
+              <div class="name">Marshal Davout</div>
+              <div class="handle">@IronMarshal</div>
+            </div>
+            <button class="follow-button">Follow</button>
+          </div>
+          <div class="follow-item">
+            <img
+              class="follow-avatar"
+              src="https://warfarehistorynetwork.com/wp-content/uploads/Murat2.jpg"
+              alt="Joachim Murat"
+            />
+            <div class="follow-info">
+              <div class="name">Joachim Murat</div>
+              <div class="handle">@JMurat_Cavalry</div>
+            </div>
+            <button class="follow-button followed">Following</button>
+          </div>
+
+          <div class="follow-item">
+            <img
+              class="follow-avatar"
+              src="https://upload.wikimedia.org/wikipedia/commons/thumb/1/1f/Francis_II%2C_Holy_Roman_Emperor_at_age_25%2C_1792.png/250px-Francis_II%2C_Holy_Roman_Emperor_at_age_25%2C_1792.png"
+              alt="Marshal Davout"
+            />
+            <div class="follow-info">
+              <div class="name">Francis II</div>
+              <div class="handle">@HRE_Emperor</div>
+            </div>
+            <button class="follow-button">Follow</button>
+          </div>
+
+          <div class="follow-item">
+            <img
+              class="follow-avatar"
+              src="https://westernciv.com/wp-content/uploads/2021/05/332cf702a12aed572780132003b306f8.jpg"
+              alt="Marshal Davout"
+            />
+            <div class="follow-info">
+              <div class="name">Alexander</div>
+              <div class="handle">@Tsar_Alexander</div>
+            </div>
+            <button class="follow-button">Follow</button>
+          </div>
+        </div>
+      </aside>
+    </main>
+  </body>
+</html>
